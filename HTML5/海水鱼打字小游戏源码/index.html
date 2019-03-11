@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>海水鱼打字小游戏源码 - 源码之家</title>
+<style type="text/css">
+
+	html{
+		height: 100%;  /*高度设置为100% 占据所有*/
+		width: auto;  /*宽度自动*/
+	}
+
+	body{
+		background: url(img6/bk.jpg) no-repeat bottom right;  
+		background-size:cover;  
+	}
+	
+	
+	.logoImg{
+		text-align: center; /*里面的文本图片居中*/
+		margin-top: 20px; /*当前这个元素距离上边的元素有多远*/
+	}
+
+	.logo{
+		width: 600px;
+
+	}
+
+
+	.btnDiv img{
+		width: 180px;
+		height: 100px;
+	}
+
+	.leftBtn{
+		margin-right: 80px; /*距离右边有80像素*/
+	}
+	#abt{
+		width:200px;
+		height:300px;
+		position: fixed;
+		left:250px;
+		top:200px;
+		display:none;
+	}
+
+	.backImg{
+		width: 150px;
+		
+		position: fixed; 
+		left: 0px; 
+		bottom: 0px;
+		display: none; /*默认将它隐藏起来*/
+	}
+
+
+
+	#rightBtn{
+		position: fixed;
+		right: 0px;
+		bottom: 0px;
+		display: none;
+	}
+	#rightBtn img{
+		width: 150px;
+		height: 100px;
+	}
+	#difi{
+		
+		text-align: center;
+		position:fixed;
+		right:150px;
+		bottom:280px;
+		display:none;
+	}
+	#difi img{
+		width:120px;
+		height:100px;
+		
+
+	}
+	
+	
+	.qipao{
+		background: url(img6/qp6.png);
+		width: 45px;
+		height: 40px;
+		line-height: 40px; 
+		position: fixed;
+		left: 400px;
+		bottom: 0px;
+	}
+.yu{
+		background:url(img/yu7.gif);
+		width:160px;
+		height:110px;
+		position:fixed;
+		right:0px;
+		top:100px;
+		line-height:110px;/*垂直居中*/
+		text-align:center;/*水平居中*/
+		font-size:35px;
+		color:yellow;
+
+	}
+	.fenshu{
+	   background: url(img6/35.png);
+		position:fixed;
+		/*left: 40px;*/
+		top: 0px;
+		/*将宽和高设置成和图片一样大小*/
+		width: 170px;
+		height: 108px;
+		line-height: 108px; /*这个属性的高度与容器高度一样，即可实现居中*/
+		text-align: center;
+		font-size: 40px;
+		color: blue;
+	}
+
+</style>
+
+<script type="text/javascript">
+
+	var qipaos=[];
+	var yus=[];
+	var d1=null;
+	var d2=null;
+	var d3=null;
+	var d4=null;
+	var d5=null;
+
+	var speed;
+	var clc="ture" ;
+	var stop="ture";
+	var num=0;
+
+	function about(){
+		show(["abt"]);
+	   }
+	function guanyu(){
+		hide(["abt"]);
+	   }
+	
+	 function pause(){
+		var music = getById("jazmusic");
+		music.pause();
+		if(stop){
+			clearInterval(d1);
+			clearInterval(d2);
+			clearInterval(d3);
+			clearInterval(d4);
+			stop = false;
+			
+		}else{
+			var music = getById("jazmusic");
+			music.play();
+			d1=setInterval(creatyu,speed);
+			d2=setInterval(creatqipao,1500);
+			d3=setInterval(moveqp, 200);
+			d4=setInterval(moveyu, 200);
+			stop= true;
+		}
+		
+	}            
+		
+
+	function startGame(){
+		hide(["logoImg","abt"]);
+		show(["backImg","rightBtn"]);
+		d1=setInterval(creatyu,1500);
+		d2=setInterval(creatqipao,1000);
+		d3=setInterval(moveqp, 300);
+		d4=setInterval(moveyu, 300);
+		d5=setInterval(buyufenshu,0);
+		var music = getById("jazmusic");
+		music.play();
+	}
+
+	function backLogo(){
+		var music = getById("jazmusic");
+		music.pause();
+		hide(["backImg","rightBtn","difi"]);
+		show(["logoImg"]);
+		qipaos=[];
+		yus=[];
+		getById("gamep").innerHTML = "";
+		getById("gameyu").innerHTML = "";
+		clearInterval(d1);
+		clearInterval(d2);
+		clearInterval(d3);
+		clearInterval(d4);
+		clearInterval(d5);
+		num=0;
+		clc=true;
+	}
+	   
+
+	function creatqipao(){
+		var ele = createElement("div","gamep","qipao");
+		var width = document.documentElement.clientWidth;
+		width = width - 350;
+		ele.style.left =  (Math.random()*width + 150) + "px";
+		qipaos.push(ele);
+	}
+
+
+	function creatyu(){
+		 var ele = createElement("div","gameyu","yu");
+		 var height = document.documentElement.clientHeight;
+		 height=height-400;
+		 ele.style.top = (Math.random()*height+100) + "px";
+		 var chars="ABCDEFGHIGKLMNOPQRSTUVWXYZ";
+		 var num=Math.random()*chars.length;
+		 var znum=parseInt(num);
+		 var randomchar=chars.charAt(znum);
+		 ele.innerHTML=randomchar;
+		 yus.push(ele);
+
+	 }	
+	 function buyufenshu(){
+		var fenshu =createElement("div","gameyu","fenshu")
+		fenshu.style.left=0+"px";
+		fenshu.innerHTML= num;
+}
+
+	 function moveqp(){
+		
+		for( var i=0;i<qipaos.length;i++){
+			var qipao=qipaos[i];
+			move(qipao,"bottom",50);
+			
+		}
+
+}
+
+
+function moveyu(){
+		
+		for( var i=0;i<yus.length;i++){
+			var yu=yus[i];
+			move(yu,"right",60);}
+		
+}
+
+
+	window.onkeydown = function(event){
+
+		var keyCode = event.keyCode;
+	
+		var key = String.fromCharCode(keyCode);
+
+		for(var i=0;i<yus.length ;i++){
+			var yu = yus[i];
+			
+			var ykey = yu.innerHTML;
+			
+			if(key == ykey){
+				
+				yus.splice(i,1);
+				yu.parentNode.removeChild(yu);
+				num=num+10;
+			
+			}
+		}
+	}
+
+	function dengji(){
+			var music = getById("jazmusic");
+			music.pause();
+			show(["difi"]);
+		 if(clc){
+			clearInterval(d1);
+			clearInterval(d2);
+			clearInterval(d3);
+			clearInterval(d4);
+			qipaos=[];
+			yus=[];
+			getById("gamep").innerHTML = "";
+			getById("gameyu").innerHTML = "";
+			clc= false;			  
+				
+		}
+		 else{
+			hide(["difi"]);
+			d1=setInterval(creatyu,1500);
+			d2=setInterval(creatqipao,1000);
+			d3=setInterval(moveqp, 300);
+			d4=setInterval(moveyu, 300);
+			clc= true;
+		}
+
+	}
+	 function first(){
+			hide(["difi"]);
+			speed=1000;
+			num=0;
+			var music = getById("jazmusic");
+			music.play();
+		 if(clc){
+			clearInterval(d1);
+			clearInterval(d2);
+			clearInterval(d3);
+			clearInterval(d4);
+			clc = false;                
+		}
+		else{
+			d1=setInterval(creatyu,speed);
+			d2=setInterval(creatqipao,1000);
+			d3=setInterval(moveqp, 300);
+			d4=setInterval(moveyu, 300);
+			clc= true;
+		}    
+	}
+
+	function second(){
+			hide(["difi"]);
+			speed=500;
+			num=0;
+			var music = getById("jazmusic");
+			music.play();
+		 if(clc){
+			clearInterval(d1);
+			clearInterval(d2);
+			clearInterval(d3);
+			clearInterval(d4);
+			clc = false;                
+		}
+		else{
+			d1=setInterval(creatyu,speed);
+			d2=setInterval(creatqipao,1000);
+			d3=setInterval(moveqp, 300);
+			d4=setInterval(moveyu, 300)   
+			clc = true;
+		}    
+	}
+  
+
+	function getById(id){
+		return document.getElementById(id);
+	}
+
+	function hide(arr){
+		for(var i=0;i < arr.length;i++){
+			var id = arr[i]; //拿到id的值 
+			var ele = getById(id); //得到对应的元素
+			ele.style.display = "none";
+		}
+	}
+
+	function show(arr){
+		for(var i=0;i < arr.length;i++){
+			var id = arr[i]; //拿到id的值 
+			var ele = getById(id); //得到对应的元素
+			ele.style.display = "block";
+		}
+	}
+
+	function createElement(tagName,id,className){
+		var ele= document.createElement(tagName);
+		if(className){
+			ele.className = className;
+		}
+		var parent = document.getElementById(id);
+		parent.appendChild(ele);
+		return ele;
+	}
+
+	function move(ele,site,speed){
+		var currentSite = parseInt(ele.style[site] || "0px");
+		var tempSite = "clientWidth";
+
+		if(site=="bottom" || site=="top"){
+			tempSite = "clientHeight";
+		}
+		var bodySite = document.documentElement[tempSite];
+		if(currentSite >= bodySite){
+			if(ele.parentNode){
+				ele.parentNode.removeChild(ele);
+			}
+			return true;
+		}else{
+			ele.style[site] = (currentSite + speed) + "px";
+			return false;
+		}
+	}
+</script>
+
+</head>
+<body>
+
+<div id="logoImg" class="logoImg">
+	<img class="logo" src="img6/36.png" />
+	<div class="btnDiv">
+		<img   class="leftBtn"  src="img6/32.png"  onclick="about()" />
+		<img  src="img6/33.png" onclick="startGame()" />
+	</div>
+</div>
+<img id="abt" src="img6/30.png" onclick="guanyu()" />
+
+<img id="backImg" class="backImg" src="img6/9.png" onmousedown="this.src='img6/18.png'" onmouseup="this.src='img6/18.png'" onclick="backLogo()" />
+<div id="rightBtn">
+	<img src="img6/11.png" onmousedown="this.src='img6/26.png'" onmouseup="this.src='img6/11.png'"    onclick="dengji()"/> <br />
+	<img src="img6/10.png" onmousedown="this.src='img6/27.png'" onmouseup="this.src='img6/10.png'"    onclick="pause()" />
+	
+</div>
+<div id="difi">
+	<img src="img6/23.png" onclick="first()" /> <br />
+	<img src="img6/24.png" onclick="second()" /> <br />
+	
+</div>
+<div id="gamep"></div>
+<div id="gameyu"></div>
+<audio  id="jazmusic" loop="">
+	<source src="d.ogg" type="audio/ogg">
+	<source src="d.mp3" type="audio/mpeg">      
+
+</audio>
+<div style="text-align:center;">
+<p>更多源码：<a href="http://www.mycodes.net/" target="_blank">源码之家</a></p>
+</div>
+</body>
+</html>

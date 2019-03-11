@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cmn-Hans" style="font-size: 16.15px;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+<title>HTML5砸金蛋抽奖游戏代码 - 源码之家</title>
+
+<script>
+	(function (doc, win) {
+		var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+				recalc = function () {
+					var clientWidth = docEl.clientWidth;
+					if (!clientWidth) return;
+					docEl.style.fontSize = 5 * (clientWidth / 100) + 'px';
+				};
+
+		if (!doc.addEventListener) return;
+		win.addEventListener(resizeEvt, recalc, false);
+		doc.addEventListener('DOMContentLoaded', recalc, false);
+	})(document, window);
+</script>
+
+<style>
+	.portrait body div.landscape{ display: none !important; }
+	.landscape body div.landscape{ display: block !important; }
+	.loading{position:fixed;z-index:999;top:0;left:0;display:table;width:100%;height:100%;background:#93167b;color:#cbe8b2;text-align:center}.loading .loader{display:table-cell;vertical-align:middle}.loading .loader span{position:relative;display:inline-block;margin-bottom:.5rem;border-top:.3rem solid hsla(0,0%,100%,.2);border-right:.3rem solid hsla(0,0%,100%,.2);border-bottom:.3rem solid hsla(0,0%,100%,.2);border-left:.3rem solid #fff;-webkit-animation:load 1s infinite linear;animation:load 1s infinite linear}.loading .loader span,.loading .loader span:after{width:2.8rem;height:2.8rem;border-radius:50%}@-webkit-keyframes load{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes load{0%{-webkit-transform:rotate(0);transform:rotate(0)}to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
+</style>
+<link rel="stylesheet" type="text/css" href="css/style2.css">
+
+</head>
+<body onload="init();">
+
+<!--loading-->
+<div id="loading" class="loading">
+    <div class="loader">
+        <span></span>
+        <p id="loadtext">Loading...</p>
+    </div>
+</div>
+<!--//loading-->
+
+
+<div class="gamebox">
+    <div class="stage">
+        <img src="images/stage.png" style="display: block;">
+        <div class="lanren">
+            <div class="agg"></div>
+            <div class="agg"></div>
+            <div class="agg"></div>
+        </div>
+
+        <!--中奖-->
+        <div class="winBox" style="display: none;">
+            <img src="">
+        </div>
+
+
+    </div>
+
+    <div class="footer">
+        <p>已有 <span>1000</span> 人参与<br>您今天还有 <span id="chance">0</span> 次抽奖机会</p>
+    </div>
+</div>
+
+
+<!--活动说明-->
+<div class="jn-box" style="display: none;">
+    <span class="btn-close">×</span>
+    <div id="tabs" class="tabs">
+        <strong class="current"><span>活动说明</span></strong>
+        <strong><span>我的奖品</span></strong>
+    </div>
+    <div id="tabs-body" class="tabsbox">
+        <div>
+            <h4>活动时间</h4>
+            <p>2016年12月7日—2016年12月9日20：00</p>
+
+            <h4>活动奖品：共计1009项</h4>
+            <p>一等奖：1万元定制精装抵用券 ［1名］</p>
+            <p>一等奖：1万元定制精装抵用券      ［1名］</p>
+            <p>二等奖：5000元定制精装抵用券   ［3名］</p>
+            <p>三等奖：2000元定制精装抵用券   ［5名］</p>
+            <p>四等奖：电影票1张                      ［500名］</p>
+            <p>五等奖：星巴克兑换券1张            ［500名］</p>
+            <p>注：本次活动“定制精装抵用券”奖品仅适用于华发股份在珠海地区的华发山庄、华发水岸、华发又一城、华发城建未来荟项目，抵用券有效期至2016年12月31日止，不可折现。</p>
+
+            <h4>主办单位</h4>
+            <p>本次活动主办单位为珠海华发股份实业有限公司、珠海华发景龙建设有限公司。<br/>主办单位在法律允许的范围内拥有活动的最终解释权</p>
+
+            <h4>活动及兑奖</h4>
+            <p>每个微信号每日3次抽奖机会<br/>
+                2016年12月10日—12月18日，获奖用户可凭兑奖码在华发商都C馆一楼华发城市生活馆进行奖品兑换。
+            </p>
+
+            <h4>后台中奖设置</h4>
+            <p>活动期间，每个微信号最多能够抽取一次奖品。</p>
+
+            <h4>奖品核销</h4>
+            <p>通过销售顾问线下手机扫码进行奖品核销。</p>
+
+
+        </div>
+        <div style="display: none; padding-bottom: 4rem; position: relative;">
+
+            <div class="Prize">
+                <p>五等奖：星巴克兑换券1张</p>
+                <p>兑奖日期：2016年12月10日—12月18日</p>
+                <p style="color: #c09735;">不可折现</p>
+                <div>未兑奖</div>
+                <img src="images/biaojiao.png">
+            </div>
+
+            <div class="Prize">
+                <p>五等奖：星巴克兑换券1张</p>
+                <p>兑奖日期：2016年12月10日—12月18日</p>
+                <p style="color: #c09735;">不可折现</p>
+                <div>未兑奖</div>
+                <img src="images/biaojiao.png">
+            </div>
+
+            <div class="Prize">
+                <p>五等奖：星巴克兑换券1张</p>
+                <p>兑奖日期：2016年12月10日—12月18日</p>
+                <p style="color: #c09735;">不可折现</p>
+                <div>未兑奖</div>
+                <img src="images/biaojiao.png">
+            </div>
+
+            <div class="Prize">
+                <p>五等奖：星巴克兑换券1张</p>
+                <p>兑奖日期：2016年12月10日—12月18日</p>
+                <p style="color: #c09735;">不可折现</p>
+                <div>未兑奖</div>
+                <img src="images/biaojiao.png">
+            </div>
+
+            <div class="footer-btn">
+                <button id="btn-qrcode" class="btn btn-qrcode">关注我们</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!--没中-->
+<div id="sorryBox" class="sorryBox" style="display: none;">
+    <div>
+        <img src="images/sorry.png" style="margin-bottom: 10%;">
+        <button id="start-again" class="btn">再来一次</button>
+        <button class="btn btn-qrcode">关注我们</button>
+    </div>
+</div>
+
+<!--登记-->
+<div id="fromBox" class="fromBox" style="display: none;">
+    <div>
+        <img src="images/dj-header.png">
+        <div class="from">
+            <input type="text" id="username" placeholder="输入姓名">
+            <input type="tel" id="telphone" placeholder="输入手机号">
+            <div class="clearfix">
+                <input type="text" placeholder="填写验证码">
+                <button id="btn-getcode" class="btn">获取验证码</button>
+            </div>
+        </div>
+
+        <button id="btn-lq" class="btn">领取</button>
+
+    </div>
+</div>
+
+<!--关注我们二维码-->
+<div class="qrcodeBox" style="display: none;">
+    <div>
+        <img src="images/qrcode.png">
+        <span class="qr-close">×</span>
+    </div>
+</div>
+
+
+<img src="images/jingnan.png" class="acePack">
+
+
+<div class="landscape" style="display: none">
+    <div><img src="images/fpts.png"></div>
+</div>
+
+
+<img src="images/musicIocn.png" id="music" class="music">
+
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="js/preloadjs-NEXT.min.js"></script>
+<script src="js/soundjs-NEXT.min.js"></script>
+<script>
+
+    var chance = 5;  //砸蛋次数
+
+    function init() {
+
+        var assetsPath = "images/";
+        manifest = [
+            {id: "bgMusic", src: "music.ogg"},
+            {id: "img01", src: "agg.png"},
+            {id: "img02", src: "agg-puo.png"},
+            {id: "img03", src: "bg.jpg"},
+            {id: "img04", src: "hammer.png"},
+            {id: "img05", src: "jingnan.png"},
+            {id: "img06", src: "logo.png"},
+            {id: "img07", src: "sorry.png"},
+            {id: "img08", src: "stage.png"},
+            {id: "img09", src: "qrcode.png"}
+        ];
+
+        createjs.Sound.alternateExtensions = ["mp3"];
+        preload = new createjs.LoadQueue(true, assetsPath);
+        preload.installPlugin(createjs.Sound);
+        preload.addEventListener("complete", doneLoading);
+        preload.addEventListener("progress", updateLoading);
+        preload.loadManifest(manifest);
+
+        function updateLoading() {
+            $("#loadtext").text("Loading " + (preload.progress * 100 | 0) + "%");
+        }
+
+        //loading完毕
+        function doneLoading(event) {
+            //createjs.Sound.play("laser");
+            $("#loading").hide();
+            // start 播放背景音乐
+            createjs.Sound.play("bgMusic", {interrupt: createjs.Sound.INTERRUPT_NONE, loop: -1, volume: 0.4});
+        }
+
+        var Musicplay = true;
+        $("#music").on('click', function(){
+            if(Musicplay == true){
+                createjs.Sound.stop("bgMusic");
+                $("#music").addClass("Musicpaused");
+                Musicplay = false;
+            }
+            else {
+                createjs.Sound.play("bgMusic");
+                $("#music").removeClass("Musicpaused");
+                Musicplay = true;
+            }
+
+        });
+
+        var winH = $(window).innerHeight();
+        var winW = $(window).innerWidth();
+        $("body,.gamebox,.jn-box").css({height:winH,width:winW});
+
+        $("#chance").text(chance);
+        
+        var YesorNo = true;
+        function aClick() {
+
+            $(".agg").off("click", aClick);
+
+            chance-=1;
+            $("#chance").text(chance);
+
+            if(chance<0){
+                chance = 0;
+                $("#chance").text(chance);
+                alert("你今天的5次砸蛋机会已经用完！");
+                $(".agg").on("click", aClick);
+            }
+            else {
+                var _this = $(this);
+                _this.parents(".lanren").addClass("paused");
+                _this.html('<img src="images/hammer.png" class="hammer"><img src="images/agg-puo.png" class="agg-puo">');
+
+                setTimeout(function () {
+                    _this.css({background:"none"}).find(".agg-puo").show();
+
+                    setTimeout(function () {
+//是否中奖
+                        
+
+                        if (YesorNo == true){
+                            $("#sorryBox").show();
+                            YesorNo = false;
+                        }
+                        else {
+                            $(".lanren").hide();
+                            $(".winBox").show().find("img").attr("src","images/jp-1.png");
+                            $(".footer").find("p").html("<button class='btn' style='margin: 1.5% 0;'>登记领奖</button>").on("click",function () {
+                                $("#fromBox").show();
+                            })
+                            YesorNo = true;
+                        }
+
+                    },500);
+                },250);
+            }
+
+        }
+
+        $(".agg").on("click", aClick);
+
+
+        //重新开始
+        $("#start-again").on('click', function () {
+            $("#sorryBox").hide();
+            $(".lanren").removeClass("paused");
+            $(".agg").on("click", aClick).html("").attr("style","");
+        });
+
+        //打开锦囊
+        $(".acePack").on('click', function(){
+            $(".jn-box").show().find(".btn-close").on('click',function () {
+                $(".jn-box").hide();
+            });
+            console.log($("#tabs").height());
+            $("#tabs-body").css({height:winH - $("#tabs").height()});
+        });
+
+        $("#tabs > strong").on('click', function(){
+            var index = $(this).index();
+            var divs = $("#tabs-body > div");
+            $(this).addClass("current").siblings().removeClass("current");
+            divs.hide();
+            divs.eq(index).show();
+        });
+
+
+        //关注二维码
+        $(".btn-qrcode").on('click', function(){
+            $(".qrcodeBox").show().find(".qr-close").on('click',function () {
+                $(".qrcodeBox").hide();
+            });
+        });
+
+
+        //获取验证码
+        var waitCode=60;
+        function time(o) {
+            if (waitCode == 0) {
+                o.removeAttr("disabled");
+                o.text("获取验证码");
+                waitCode = 2;
+            } else {
+                o.attr("disabled","");
+                o.text("重新发送(" + waitCode + ")");
+                waitCode--;
+                setTimeout(function() {
+                    time(o)
+                },1000);
+            }
+        }
+        $("#btn-getcode").on('click', function(){
+            time($(this));
+        });
+
+        //登记
+        $("#btn-lq").on('click', function(){
+            if($("#username").val()==""){
+                alert("请输入姓名");
+            }
+            else {
+                location.href = "qrcode.html";
+            }
+        });
+
+    }
+
+
+    (function () {
+        var init = function () {
+            var updateOrientation = function () {
+                var orientation = window.orientation;
+                switch (orientation) {
+                    case 90:
+                    case -90:
+                        orientation = 'landscape'; //这里是横屏
+                        break;
+                    default:
+                        orientation = 'portrait'; //这里是竖屏
+                        break;
+                }
+                document.body.parentNode.setAttribute('class', orientation);
+            };
+            window.addEventListener('orientationchange', updateOrientation, false);
+            updateOrientation();
+        };
+        window.addEventListener('DOMContentLoaded', init, false);
+    })();
+
+</script>
+<div style="text-align:center;">
+<p>更多源码：<a href="http://www.mycodes.net/" target="_blank">源码之家</a></p>
+</div>
+</body>
+</html>
